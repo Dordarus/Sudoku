@@ -10,7 +10,7 @@ namespace Sudoku
     {
         public static int[,] BaseBigMatrix()
         {
-            const int n = 3;            // n  - размер маленькой ячейки количество ячеек n*n
+            const int n = 3;      
             var grid = new int[n * n, n * n];
 
             for (var i = 0; i < grid.GetLength(0); i++)
@@ -103,15 +103,8 @@ namespace Sudoku
         }
 
         public static int[,] Swaping(int[,] trans)
-        {
-            //Перемешиваю строчки в переделах их квадратов 3Х3, Рандомное количество раз
+        {       
             SwapRows(trans);
-            /*
-             * Перемешиваю столбцы в 3 шага: 
-             * 1.Транспонирую даную матрицу
-             * 2.Перемешиваю сторчки
-             * 3.Транспонирую второй раз
-             */
             return SwapColumns(trans);
         }
 
