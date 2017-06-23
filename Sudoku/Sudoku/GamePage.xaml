@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sudoku.GamePage"
+             Padding="5">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="Red" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout x:Name="stackLayout">
+        <Frame x:Name="frame" OutlineColor="Gray" Padding="1" BackgroundColor="#404040" VerticalOptions="CenterAndExpand"/>
+        <StackLayout VerticalOptions="CenterAndExpand" Orientation="Horizontal" Padding="10,10">
+            <StackLayout>
+                <Button Text="Undo" Style="{StaticResource buttonStyle}" Clicked="Undo_Clicked"/>
+                <Button Text="New Game" Style="{StaticResource buttonStyle}" Clicked="NewGame_Clicked"/>
+            </StackLayout>
+            <StackLayout x:Name="numbers"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Sudoku"
+             x:Class="Sudoku.MainPage"
+             Title="Choose your game"
+             Padding="5">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="Red" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Frame OutlineColor="Accent" VerticalOptions="Center">
+        <StackLayout>
+            <Button Text="Start New Game" Style="{StaticResource buttonStyle}" Clicked="StartButton_Clicked"/>
+            <Button Text="Continue Old Game" Style="{StaticResource buttonStyle}" Clicked="ContinueButton_Clicked"/>
+        </StackLayout>
+    </Frame>
+</ContentPage>

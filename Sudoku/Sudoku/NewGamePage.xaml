@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sudoku.NewGamePage"
+             Title="New Player"
+             Padding="5">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="IsEnabled" Value="False" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Frame OutlineColor="Gray" Margin="10">
+        <StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label Text="Enter your name:" FontSize="30" Margin="5,20"/>
+                <Entry x:Name="name" Text="" FontSize="18" Placeholder="Name" TextChanged="name_TextChanged"/>
+            </StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label Text="Choose difficult" FontSize="20" Margin="5,20"/>
+                <Grid x:Name="grid" ColumnSpacing="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Text="Easy" BackgroundColor="#4ca64c" Style="{StaticResource buttonStyle}" Clicked="Button_Clicked" Grid.Column="0"/>
+                    <Button Text="Medium" BackgroundColor="#ffc04c" Style="{StaticResource buttonStyle}" Clicked="Button_Clicked"  Grid.Column="1"/>
+                    <Button Text="Hard" BackgroundColor="#ff4c4c" Style="{StaticResource buttonStyle}" Clicked="Button_Clicked"  Grid.Column="2"/>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</ContentPage>
