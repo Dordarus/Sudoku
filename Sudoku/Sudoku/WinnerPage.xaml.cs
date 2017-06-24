@@ -26,7 +26,7 @@ namespace Sudoku
 
             Label label = new Label
             {
-                Text = $"{name} your score :/nDifficult:{dif}/nTime: {gameDuration}",
+                Text = $"{name} your score :\nDifficult:{dif}\nTime: {gameDuration}",
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };

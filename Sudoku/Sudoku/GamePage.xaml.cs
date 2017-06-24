@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sudoku.CustomProperties;
 using System.Threading.Tasks;
 using static Sudoku.Generator;
@@ -31,29 +32,58 @@ namespace Sudoku
             Numbers();
         }
 
-        // Event when 1 of 81 cells tapped, change the color of the tapped cell to LightBlue 
-        //remember last tapped cell and change it color on its base color, when tapped another one 
-        int lastIndex = 0;
-        int counter = 0;
+        //Event when 1 of 81 cells was tapped, changing the color of the tapped cell and all labels with same numbers to LightBlue, 
+        //remembered last tapped cell and all labels with same numbers and change their color on base color, when tapped another one
+        int lastIndex = -1;
         Color lastColor;
+
+        Dictionary<int, Color> lastCells = new Dictionary<int, Color>();
+        int counter = 0;
         private void TapGesture_Label(object sender, EventArgs e)
         {
-            var label = sender as TagLabel;
-            var parentGrid = (Grid)label.Parent;
-            var index = parentGrid.Children.IndexOf(label);
+            var labelSender = sender as TagLabel;
+            var index = playGround.Children.IndexOf(labelSender);
+            var isCorrectNumber = IsCorrectNumber(index, labelSender.Text, playGround);
 
-            if (counter != 0)
+            foreach (var i in lastCells)
             {
-                parentGrid.Children[lastIndex].BackgroundColor = lastColor;
+                playGround.Children[i.Key].BackgroundColor = i.Value;
             }
 
-            lastIndex = parentGrid.Children.IndexOf(label);
-            lastColor = label.BackgroundColor;
+            if (lastIndex >= 0)
+            {
+                playGround.Children[lastIndex].BackgroundColor = lastColor;
+            }
 
-            label.BackgroundColor = Color.LightBlue;
-            counter++;         
+            if (labelSender.Text == "")
+            {
+                lastIndex = playGround.Children.IndexOf(labelSender);
+                lastColor = labelSender.BackgroundColor;
+
+                labelSender.BackgroundColor = Color.LightBlue;
+
+            }
+            else
+            {
+                foreach (TagLabel label in playGround.Children)
+                {
+                    if (label.Text == labelSender.Text)
+                    {
+                        var indexForeachLabel = playGround.Children.IndexOf(label);
+
+                        if (lastCells.ContainsKey(indexForeachLabel))
+                        {
+                            lastCells.Remove(indexForeachLabel);
+                        }
+
+                        lastCells.Add(indexForeachLabel, label.BackgroundColor);
+
+                        label.BackgroundColor = Color.LightBlue;
+                    }
+                }
+            }
+            counter++;
         }
-
 
         //Create Grid of buttons with numbers from 1 to 9, and 10th button is delete-button
         public void Numbers()
@@ -140,12 +170,25 @@ namespace Sudoku
                 label.VerticalTextAlignment = TextAlignment.Center;
                 label.TextColor = Color.Black;
 
+                if (label.Tag == "play")
+                {
+                    label.PropertyChanged += Label_TextChanged;
+                }
 
                 label.GestureRecognizers.Add(tapGesture);
             }
             tapGesture.Tapped += TapGesture_Label;
         }
-       
+
+        //Evant whan TextProperty of Label changed, call TapGesture_Label event to show all same numbers on playground
+        private void Label_TextChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Text" && ((Label)sender).Text != "")
+            {
+                TapGesture_Label(sender, new EventArgs());
+            }
+        }
+
         //Event whan user click one of 10th button which contain numbers and delete-button 
         //and set text of button into current activ cell
         private void Button_Clicked(object sender, EventArgs e)
