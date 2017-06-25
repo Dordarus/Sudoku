@@ -49,7 +49,6 @@ namespace Sudoku
         Color lastColor;
 
         Dictionary<int, Color> lastCells = new Dictionary<int, Color>();
-        int counter = 0;
         private void Highlightning(TagLabel tagLabel, bool isCorrectNumber)
         {
             var index = playGround.Children.IndexOf(tagLabel);           
@@ -92,7 +91,6 @@ namespace Sudoku
                     }
                 }
             }
-            counter++;
         }
 
         //Create Grid of buttons with numbers from 1 to 9, and 10th button is delete-button
@@ -210,21 +208,22 @@ namespace Sudoku
         //and set text of button into current activ cell
         private void Button_Clicked(object sender, EventArgs e)
         {
+
             var button = (Button)sender;
             var parentGrid = (Grid)((button).Parent);
             var label = (TagLabel)playGround.Children[lastIndex];
             var hasEmptyCell = true;
 
             if (label.Tag == "play")
-            {
+            {              
                 if (parentGrid.Children.IndexOf(button) != parentGrid.Children.Count - 1)
                 {
+                    var counter = 0;
+
                     label.FontAttributes = FontAttributes.None;
                     label.Text = button.Text;
 
                     var isCorrectNumber = IsCorrectNumber(lastIndex, label.Text, playGround);
-
-                    //DisplayAlert("Is correct?", $"{isCorrectNumber}", "Cancel");
 
                     //Cheking text of all labels, if there are no emty cells and last number is correct number - you are winner
                     foreach (TagLabel tagLabel in playGround.Children)
@@ -241,6 +240,17 @@ namespace Sudoku
                         }                     
                     }
 
+                    foreach (TagLabel tagLabel in playGround.Children)
+                    {
+                        if (tagLabel.Text == button.Text)
+                        {
+                            if (++counter == 9)
+                            {
+                                button.IsEnabled = false;
+                            }
+                        }
+                    }
+
                     //Show Winner modal page with scores : time of game duration, name and difficult 
                     if (hasEmptyCell == false && isCorrectNumber)
                     {
@@ -250,8 +260,28 @@ namespace Sudoku
                 else
                 {
                     label.Text = "";
+                    var counter = 0;
+
+                    foreach (Button b in parentGrid.Children)
+                    {
+                        if (b.IsEnabled == false)
+                        {
+                            foreach (TagLabel tagLabel in playGround.Children)
+                            {
+                                if (tagLabel.Text == b.Text)
+                                {
+                                    ++counter;                                 
+                                }                              
+                            }
+
+                            if (counter < 9)
+                            {
+                                b.IsEnabled = true;
+                            }
+                        }
+                    }
                 }
-            }
+            }      
         }
 
 
