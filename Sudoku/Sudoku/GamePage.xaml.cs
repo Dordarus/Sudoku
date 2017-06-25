@@ -32,18 +32,27 @@ namespace Sudoku
             Numbers();
         }
 
-        //Event when 1 of 81 cells was tapped, changing the color of the tapped cell and all labels with same numbers to LightBlue, 
+        private void TapGesture_Label(object sender, EventArgs e)
+        {
+            var label = (TagLabel)sender;
+
+            int index = playGround.Children.IndexOf(label);
+
+            var isCorrectNUmber = IsCorrectNumber(index, label.Text, playGround);
+
+            Highlightning((TagLabel)sender, isCorrectNUmber);
+        }
+
+        //Method work with data with send TapGesture_Label evant, when 1 of 81 cells was tapped, changing the color of the tapped cell and all labels with same numbers to LightBlue, 
         //remembered last tapped cell and all labels with same numbers and change their color on base color, when tapped another one
         int lastIndex = -1;
         Color lastColor;
 
         Dictionary<int, Color> lastCells = new Dictionary<int, Color>();
         int counter = 0;
-        private void TapGesture_Label(object sender, EventArgs e)
+        private void Highlightning(TagLabel tagLabel, bool isCorrectNumber)
         {
-            var labelSender = sender as TagLabel;
-            var index = playGround.Children.IndexOf(labelSender);
-            var isCorrectNumber = IsCorrectNumber(index, labelSender.Text, playGround);
+            var index = playGround.Children.IndexOf(tagLabel);           
 
             foreach (var i in lastCells)
             {
@@ -55,19 +64,17 @@ namespace Sudoku
                 playGround.Children[lastIndex].BackgroundColor = lastColor;
             }
 
-            if (labelSender.Text == "")
+            lastIndex = playGround.Children.IndexOf(tagLabel);
+            lastColor = tagLabel.BackgroundColor;
+            if (tagLabel.Text == "")
             {
-                lastIndex = playGround.Children.IndexOf(labelSender);
-                lastColor = labelSender.BackgroundColor;
-
-                labelSender.BackgroundColor = Color.LightBlue;
-
+                tagLabel.BackgroundColor = Color.LightBlue;
             }
             else
             {
                 foreach (TagLabel label in playGround.Children)
                 {
-                    if (label.Text == labelSender.Text)
+                    if (label.Text == tagLabel.Text)
                     {
                         var indexForeachLabel = playGround.Children.IndexOf(label);
 
@@ -77,8 +84,11 @@ namespace Sudoku
                         }
 
                         lastCells.Add(indexForeachLabel, label.BackgroundColor);
-
-                        label.BackgroundColor = Color.LightBlue;
+                        
+                        if (isCorrectNumber)
+                            label.BackgroundColor = Color.LightBlue;
+                        else
+                            label.BackgroundColor = Color.Red;
                     }
                 }
             }
@@ -183,9 +193,16 @@ namespace Sudoku
         //Evant whan TextProperty of Label changed, call TapGesture_Label event to show all same numbers on playground
         private void Label_TextChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Text" && ((Label)sender).Text != "")
+            var label = (TagLabel)sender;
+
+            if (e.PropertyName == "Text" && label.Text != "")
             {
-                TapGesture_Label(sender, new EventArgs());
+                int index = playGround.Children.IndexOf(label);
+
+                var isCorrectNUmber = IsCorrectNumber(index, label.Text, playGround);
+
+                Highlightning(label, isCorrectNUmber);
+
             }
         }
 

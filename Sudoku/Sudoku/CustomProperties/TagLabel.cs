@@ -2,7 +2,7 @@
 
 namespace Sudoku.CustomProperties
 {
-    class TagLabel : Label
+    public class TagLabel : Label
     {
         public static readonly BindableProperty TagProperty =
             BindableProperty.Create("Tag", typeof(string), typeof(TagLabel), "0");
