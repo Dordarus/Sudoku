@@ -30,7 +30,35 @@ namespace Sudoku
             frame.Content = playGround;
             LabelTapOption();
             Numbers();
+
+            Appearing += GamePage_Appearing;
         }
+
+        private void GamePage_Appearing(object sender, EventArgs e)
+        {
+            var parentGrid = (Grid)numbers.Children[0];
+
+            var counter = 0;
+
+            foreach (Button b in parentGrid.Children)
+            {
+                foreach (TagLabel tagLabel in playGround.Children)
+                {
+                    if (tagLabel.Text == b.Text)
+                    {
+                        ++counter;
+                    }
+                }
+
+                if (counter == 9)
+                {
+                    b.IsEnabled = false;
+                }
+                counter = 0;
+            }
+        }
+
+
 
         private void TapGesture_Label(object sender, EventArgs e)
         {
@@ -39,19 +67,20 @@ namespace Sudoku
             int index = playGround.Children.IndexOf(label);
 
             var isCorrectNUmber = IsCorrectNumber(index, label.Text, playGround);
-
+        
             Highlightning((TagLabel)sender, isCorrectNUmber);
         }
 
-        //Method work with data with send TapGesture_Label evant, when 1 of 81 cells was tapped, changing the color of the tapped cell and all labels with same numbers to LightBlue, 
-        //remembered last tapped cell and all labels with same numbers and change their color on base color, when tapped another one
-        int lastIndex = -1;
-        Color lastColor;
 
-        Dictionary<int, Color> lastCells = new Dictionary<int, Color>();
+
+        //Method work with data with send TapGesture_Label event, when 1 of 81 cells was tapped, changing the color of the tapped cell and all labels with same numbers to LightBlue, 
+        //remembered last tapped cell and all labels with same numbers and change their color on base color, when tapped another one
+        private int lastIndex = -1;
+        private Color lastColor;
+        private Dictionary<int, Color> lastCells = new Dictionary<int, Color>();
         private void Highlightning(TagLabel tagLabel, bool isCorrectNumber)
         {
-            var index = playGround.Children.IndexOf(tagLabel);           
+            var index = playGround.Children.IndexOf(tagLabel);
 
             foreach (var i in lastCells)
             {
@@ -83,7 +112,7 @@ namespace Sudoku
                         }
 
                         lastCells.Add(indexForeachLabel, label.BackgroundColor);
-                        
+
                         if (isCorrectNumber)
                             label.BackgroundColor = Color.LightBlue;
                         else
@@ -94,7 +123,7 @@ namespace Sudoku
         }
 
         //Create Grid of buttons with numbers from 1 to 9, and 10th button is delete-button
-        public void Numbers()
+        private void Numbers()
         {
             Grid grid = new Grid { ColumnSpacing = 2 };
 
@@ -127,7 +156,7 @@ namespace Sudoku
         }
 
         //Triggered when user clicked hardware back-button call ShowDialog method
-        bool _canClose = true;
+        private bool _canClose = true;
         protected override bool OnBackButtonPressed()
         {
             if (_canClose)
@@ -148,9 +177,9 @@ namespace Sudoku
         }
 
         //Display name of player, difficult, time which passed from start of game in title
-        bool alive = true;
-        DateTime dt = DateTime.Parse("00:00");
-        string currentTime = "";
+        private bool alive = true;
+        private DateTime dt = DateTime.Parse("00:00");
+        private string currentTime = "";
         private async void DisplayTime()
         {
             while (alive)
@@ -162,13 +191,13 @@ namespace Sudoku
             }
         }
 
-        TapGestureRecognizer tapGesture = new TapGestureRecognizer
+        private TapGestureRecognizer tapGesture = new TapGestureRecognizer
         {
             NumberOfTapsRequired = 1,
         };
 
         //Bind tapGestureRecognaiser whith all labels in playground Grid 
-        public void LabelTapOption()
+        private void LabelTapOption()
         {
             foreach (TagLabel label in (frame.Content as Grid).Children)
             {
@@ -188,7 +217,7 @@ namespace Sudoku
             tapGesture.Tapped += TapGesture_Label;
         }
 
-        //Evant whan TextProperty of Label changed, call TapGesture_Label event to show all same numbers on playground
+        //event whan TextProperty of Label changed, call TapGesture_Label event to show all same numbers on playground
         private void Label_TextChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var label = (TagLabel)sender;
@@ -200,28 +229,37 @@ namespace Sudoku
                 var isCorrectNUmber = IsCorrectNumber(index, label.Text, playGround);
 
                 Highlightning(label, isCorrectNUmber);
-
             }
         }
 
         //Event whan user click one of 10th button which contain numbers and delete-button 
-        //and set text of button into current activ cell
+        //and set operation options to buttons
+        Stack<int> indexLog = new Stack<int>();
+        Stack<string> numberLog = new Stack<string>();
+
         private void Button_Clicked(object sender, EventArgs e)
         {
-
             var button = (Button)sender;
             var parentGrid = (Grid)((button).Parent);
             var label = (TagLabel)playGround.Children[lastIndex];
             var hasEmptyCell = true;
 
             if (label.Tag == "play")
-            {              
+            {
+                indexLog.Push(lastIndex);
+                numberLog.Push(label.Text);
+
                 if (parentGrid.Children.IndexOf(button) != parentGrid.Children.Count - 1)
                 {
-                    var counter = 0;
+                    var count = 0;
 
                     label.FontAttributes = FontAttributes.None;
                     label.Text = button.Text;
+
+                    indexLog.Push(lastIndex);
+                    numberLog.Push(label.Text);
+
+                    buttonStackLayout.Children[0].IsEnabled = true;
 
                     var isCorrectNumber = IsCorrectNumber(lastIndex, label.Text, playGround);
 
@@ -237,20 +275,19 @@ namespace Sudoku
                         {
                             hasEmptyCell = false;
                             continue;
-                        }                     
+                        }
                     }
 
                     foreach (TagLabel tagLabel in playGround.Children)
                     {
                         if (tagLabel.Text == button.Text)
                         {
-                            if (++counter == 9)
+                            if (++count == 9)
                             {
                                 button.IsEnabled = false;
                             }
                         }
                     }
-
                     //Show Winner modal page with scores : time of game duration, name and difficult 
                     if (hasEmptyCell == false && isCorrectNumber)
                     {
@@ -260,35 +297,56 @@ namespace Sudoku
                 else
                 {
                     label.Text = "";
-                    var counter = 0;
+                    TapGesture_Label(label, new EventArgs());                    
+                }
 
-                    foreach (Button b in parentGrid.Children)
+                var counter = 0;
+
+                foreach (Button b in parentGrid.Children)
+                {
+                    if (b.IsEnabled == false)
                     {
-                        if (b.IsEnabled == false)
+                        foreach (TagLabel tagLabel in playGround.Children)
                         {
-                            foreach (TagLabel tagLabel in playGround.Children)
+                            if (tagLabel.Text == b.Text)
                             {
-                                if (tagLabel.Text == b.Text)
-                                {
-                                    ++counter;                                 
-                                }                              
+                                ++counter;
                             }
+                        }
 
-                            if (counter < 9)
-                            {
-                                b.IsEnabled = true;
-                            }
+                        if (counter < 9)
+                        {
+                            b.IsEnabled = true;
                         }
                     }
                 }
-            }      
+            }
         }
-
-
+        //Event whan user cklick Undo-button, call 2 stack collections(numbers and indexes of labels) 
+        //which filled when the Button_Clicked event is called
         private void Undo_Clicked(object sender, EventArgs e)
         {
+            if (indexLog.Count != 0)
+            {
+                var index = indexLog.Pop();
+                var number = numberLog.Pop();
 
-        }
+                var label = (TagLabel)playGround.Children[index];
+
+                if (numberLog.Count != 0)
+                {
+                    label.Text = numberLog.Pop();
+                    indexLog.Pop();
+
+                    TapGesture_Label(label, new EventArgs());
+                }               
+            }
+
+            if (indexLog.Count == 0)
+            {
+                ((Button)sender).IsEnabled = false;
+            }
+        }      
 
         //Event whan clicked NewGame button
         private void NewGame_Clicked(object sender, EventArgs e)

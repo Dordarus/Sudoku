@@ -9,31 +9,6 @@ namespace Sudoku
     static class SmallSquare
     {
         private static List<string> squares = new List<string>(new string[9]);
-
-        //private static Dictionary<int, Color> lastCells = new Dictionary<int, Color>();
-        //private static int counter = 0;
-        //public static void SameNumbers(int index, string number, Grid grid)
-        //{
-        //    foreach (var i in lastCells)
-        //    {
-        //        if (counter != 0)
-        //        {
-        //            grid.Children[i.Key].BackgroundColor = i.Value;
-        //        }
-        //    }
-
-        //    foreach (TagLabel label in grid.Children)
-        //    {
-        //        if (label.Text == number)
-        //        {
-        //            lastCells.Add(index, label.BackgroundColor);
-        //            label.BackgroundColor = Color.LightBlue;
-        //        }
-        //    }
-        //    counter++;
-
-        //}
-
         static SmallSquare()
         {
             int[,] first = new int[9, 3];
