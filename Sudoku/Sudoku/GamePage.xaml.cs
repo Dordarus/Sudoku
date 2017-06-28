@@ -4,6 +4,7 @@ using Sudoku.CustomProperties;
 using System.Threading.Tasks;
 using static Sudoku.Generator;
 using static Sudoku.Сorrectness;
+using static Sudoku.GameSaver;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -169,8 +170,21 @@ namespace Sudoku
         //Display alert which protect user from accidental press of a button
         private async void ShowExitDialog()
         {
-            var answer = await DisplayAlert("Leave current game!", "Are you sure?", "Yes", "No");
-            if (answer)
+            bool saveGame = false;
+
+            var leaveGame = await DisplayAlert("Leave current game!", "Are you sure?", "Yes", "No");
+            if (leaveGame)
+            {
+                saveGame = await DisplayAlert("Saving", "Save this game?", "Yes", "No");
+            }
+
+            // TODO: Use this if-condition for a positive response to a request to save the game 
+            if (saveGame)
+            {
+                SaveGame(playGround);
+            }
+
+            if (leaveGame && !saveGame)
             {
                 await Navigation.PopToRootAsync();
             }
@@ -297,7 +311,10 @@ namespace Sudoku
                 else
                 {
                     label.Text = "";
-                    TapGesture_Label(label, new EventArgs());                    
+                    TapGesture_Label(label, new EventArgs());
+
+                    indexLog.Push(lastIndex);
+                    numberLog.Push(label.Text);
                 }
 
                 var counter = 0;
