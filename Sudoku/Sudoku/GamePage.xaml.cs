@@ -64,9 +64,7 @@ namespace Sudoku
         private void TapGesture_Label(object sender, EventArgs e)
         {
             var label = (TagLabel)sender;
-
             int index = playGround.Children.IndexOf(label);
-
             var isCorrectNUmber = IsCorrectNumber(index, label.Text, playGround);
         
             Highlightning((TagLabel)sender, isCorrectNUmber);
@@ -181,10 +179,12 @@ namespace Sudoku
             // TODO: Use this if-condition for a positive response to a request to save the game 
             if (saveGame)
             {
-                SaveGame(playGround);
+                string dateTime = DateTime.Now.ToString("dd.MM.yyyy hh:mm");
+                string info = $"[{dateTime}] {name}-{dif}-{currentTime}";
+                SaveGame(playGround, info);
             }
 
-            if (leaveGame && !saveGame)
+            if (leaveGame)
             {
                 await Navigation.PopToRootAsync();
             }

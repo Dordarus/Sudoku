@@ -45,6 +45,7 @@
     <Compile Include="GameSaver.cs" />
     <Compile Include="Generator\Generator.cs" />
     <Compile Include="Generator\TrueRandom.cs" />
+    <Compile Include="IFileWorker.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
