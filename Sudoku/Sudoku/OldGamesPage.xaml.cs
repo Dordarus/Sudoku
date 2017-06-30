@@ -28,9 +28,6 @@ namespace Sudoku
             
         }
 
-        static Label timeLabel = new Label();
-        static Label titleLabel = new Label { FontSize = 18 };
-
         protected override async void OnAppearing()
         {
             base.OnAppearing();
