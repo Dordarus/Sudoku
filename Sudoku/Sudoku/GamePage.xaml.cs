@@ -180,7 +180,7 @@ namespace Sudoku
             if (saveGame)
             {
                 string dateTime = DateTime.Now.ToString("dd.MM.yyyy hh:mm");
-                string info = $"[{dateTime}] {name}-{dif}-{currentTime}";
+                string info = $"{dateTime}|{name} {dif}|{currentTime}";
                 SaveGame(playGround, info);
             }
 

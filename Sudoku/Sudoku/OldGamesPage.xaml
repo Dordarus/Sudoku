@@ -3,16 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Sudoku.OldGamesPage">
     <ContentPage.Content>
-        <ListView x:Name="filesList">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding}" TextColor="Black">
-                        <TextCell.ContextActions>
-                            <MenuItem Text="Delete" IsDestructive="True" Clicked="Delete" />
-                        </TextCell.ContextActions>
-                    </TextCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <StackLayout>
+            <Label Text="Choose game" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center"/>
+            <ListView x:Name="gamesList"
+              HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <StackLayout>
+                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="18" />
+                                    <Label Text="{Binding GameDuration}" FontSize="16"/>
+                                    <Label Text="{Binding Time}" HorizontalOptions="End"/>
+                                </StackLayout>
+                            </ViewCell.View>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Delete" IsDestructive="True" Clicked="Delete" />
+                            </ViewCell.ContextActions>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
