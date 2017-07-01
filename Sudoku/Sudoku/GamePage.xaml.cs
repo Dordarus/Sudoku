@@ -16,9 +16,10 @@ namespace Sudoku
     {
         private string name;
         private string dif;
+        private string currentTime = "00:00";
 
         Grid playGround;
-        public GamePage(string name, string dif)
+        public GamePage(string name, string dif, Grid grid = null)
         {
             InitializeComponent();
             NavigationPage.SetHasBackButton(this, false);
@@ -27,12 +28,23 @@ namespace Sudoku
             this.dif = dif;
 
             DisplayTime();
-            playGround = StartGame(dif);
+
+            if (grid == null)
+                playGround = StartGame(dif);
+            else
+                playGround = grid;
+
             frame.Content = playGround;
+
             LabelTapOption();
             Numbers();
 
             Appearing += GamePage_Appearing;
+        }
+
+        public GamePage(string name, string dif, string currentTime, Grid grid) : this(name, dif, grid)
+        {
+            this.currentTime = currentTime;
         }
 
         private void GamePage_Appearing(object sender, EventArgs e)
@@ -59,8 +71,6 @@ namespace Sudoku
             }
         }
 
-
-
         private void TapGesture_Label(object sender, EventArgs e)
         {
             var label = (TagLabel)sender;
@@ -69,8 +79,6 @@ namespace Sudoku
         
             Highlightning((TagLabel)sender, isCorrectNUmber);
         }
-
-
 
         //Method work with data with send TapGesture_Label event, when 1 of 81 cells was tapped, changing the color of the tapped cell and all labels with same numbers to LightBlue, 
         //remembered last tapped cell and all labels with same numbers and change their color on base color, when tapped another one
@@ -179,7 +187,7 @@ namespace Sudoku
             // TODO: Use this if-condition for a positive response to a request to save the game 
             if (saveGame)
             {
-                string dateTime = DateTime.Now.ToString("dd.MM.yyyy hh:mm");
+                string dateTime = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
                 string info = $"{dateTime}|{name} {dif}|{currentTime}";
                 SaveGame(playGround, info);
             }
@@ -192,10 +200,9 @@ namespace Sudoku
 
         //Display name of player, difficult, time which passed from start of game in title
         private bool alive = true;
-        private DateTime dt = DateTime.Parse("00:00");
-        private string currentTime = "";
         private async void DisplayTime()
         {
+            DateTime dt = DateTime.Parse(currentTime);
             while (alive)
             {
                 dt = dt.AddSeconds(1);
@@ -250,7 +257,6 @@ namespace Sudoku
         //and set operation options to buttons
         Stack<int> indexLog = new Stack<int>();
         Stack<string> numberLog = new Stack<string>();
-
         private void Button_Clicked(object sender, EventArgs e)
         {
             var button = (Button)sender;
@@ -339,6 +345,7 @@ namespace Sudoku
                 }
             }
         }
+
         //Event whan user cklick Undo-button, call 2 stack collections(numbers and indexes of labels) 
         //which filled when the Button_Clicked event is called
         private void Undo_Clicked(object sender, EventArgs e)

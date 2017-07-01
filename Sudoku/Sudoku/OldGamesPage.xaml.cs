@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
+using static Sudoku.GameSaver;
 
 namespace Sudoku
 {
@@ -24,8 +24,7 @@ namespace Sudoku
 
         public OldGamesPage()
         {
-            InitializeComponent();
-            
+            InitializeComponent();   
         }
 
         protected override async void OnAppearing()
@@ -44,6 +43,20 @@ namespace Sudoku
             await UpdateFileList();
         }
 
+        public async void OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var game = (Game)e.Item;
+            var fileName = game.FullName;           
+            var gameDuration = game.GameDuration.Substring(14);
+
+            var splited = game.Title.Split();
+            var name = splited[0];
+            var dif = splited[1];
+
+            var playground = await LoadGame(fileName);
+            await Navigation.PushAsync(new GamePage(name, dif, gameDuration, playground));
+        }
+
         async Task UpdateFileList()
         {
             var files = await DependencyService.Get<IFileWorker>().GetFilesAsync();
@@ -52,6 +65,10 @@ namespace Sudoku
             foreach (var fileName in files)
             {
                 var splited = fileName.Substring(0, fileName.Length - 4).Split('|');
+                //if (splited.Length<2)
+                //{
+                //    continue;
+                //}
                 games.Add(new Game { Time = splited[0], Title = splited[1], GameDuration = $"Game duration {splited[2]}", FullName = fileName });
             }
             Games = games;

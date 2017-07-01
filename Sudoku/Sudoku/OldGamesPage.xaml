@@ -1,29 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Sudoku.OldGamesPage">
+             x:Class="Sudoku.OldGamesPage"
+             Title="Choose game">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Choose game" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center"/>
-            <ListView x:Name="gamesList"
-              HasUnevenRows="True">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <ViewCell.View>
-                                <StackLayout>
-                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="18" />
-                                    <Label Text="{Binding GameDuration}" FontSize="16"/>
-                                    <Label Text="{Binding Time}" HorizontalOptions="End"/>
-                                </StackLayout>
-                            </ViewCell.View>
-                            <ViewCell.ContextActions>
-                                <MenuItem Text="Delete" IsDestructive="True" Clicked="Delete" />
-                            </ViewCell.ContextActions>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+        <ListView x:Name="gamesList"
+              HasUnevenRows="True"
+              ItemTapped="OnItemTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <StackLayout>
+                                <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="18" />
+                                <Label Text="{Binding GameDuration}" FontSize="16"/>
+                                <Label Text="{Binding Time}" HorizontalOptions="End"/>
+                            </StackLayout>
+                        </ViewCell.View>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Delete" IsDestructive="True" Clicked="Delete" />
+                        </ViewCell.ContextActions>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </ContentPage.Content>
 </ContentPage>

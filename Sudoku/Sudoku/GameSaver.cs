@@ -13,14 +13,12 @@ namespace Sudoku
     {
         public string Text { get; set; }
         public Color BackgroundColor { get; set; }
-        public int Index { get; set; }
         public string Tag { get; set; }
 
         public LabelInGrid(TagLabel label)
         {
             Text = label.Text;
             BackgroundColor = label.BackgroundColor;
-            Index = ((Grid)label.Parent).Children.IndexOf(label);
             Tag = label.Tag;
         }
     }
@@ -50,12 +48,18 @@ namespace Sudoku
         } 
 
         //TODO: Use this method to load JSON-file and deserialize it into List and restore playground
-        public static async Task<Grid> LoadGame()
+        public static async Task<Grid> LoadGame(string fileName)
         {
-            var fromFile = await DependencyService.Get<IFileWorker>().LoadTextAsync("some name");
+            var fromFile = await DependencyService.Get<IFileWorker>().LoadTextAsync(fileName);
             var labelList = await Deserialize(fromFile);
 
             Grid playGround = new Grid { ColumnSpacing = 2, RowSpacing=2};
+
+            for (int t = 0; t < 9; t++)
+            {
+                playGround.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                playGround.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            }
 
             var j = 0;
             var i = 0;
@@ -69,10 +73,10 @@ namespace Sudoku
                 {
                     i++;
                     j = 0;
+                    playGround.Children.Add(label, i, j++);
                 }
             }
-
-           return playGround;
+            return playGround;
         }
 
         private static string Serialize()

@@ -112,11 +112,7 @@ namespace Sudoku
         {
             var controlGrid = new Grid { ColumnSpacing = 2, RowSpacing = 2 };
 
-            for (int i = 0; i < 9; i++)
-            {
-                controlGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                controlGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            }
+            
 
             var number = "";
             var tag = "";

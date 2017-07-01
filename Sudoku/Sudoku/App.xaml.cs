@@ -18,14 +18,16 @@ namespace Sudoku
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            
         }
 
+        //TODO: handle this event if player 
         protected override void OnSleep()
         {
             // Handle when your app sleeps
         }
 
+        //TODO: and this
         protected override void OnResume()
         {
             // Handle when your app resumes

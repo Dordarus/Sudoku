@@ -17,7 +17,7 @@ namespace Sudoku
 
         private async void ContinueButton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new OldGamesPage());
+            await Navigation.PushAsync(new OldGamesPage());
         }
     }
 }
