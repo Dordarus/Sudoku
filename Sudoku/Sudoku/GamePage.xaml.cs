@@ -42,9 +42,15 @@ namespace Sudoku
             Appearing += GamePage_Appearing;
         }
 
-        public GamePage(string name, string dif, string currentTime, Grid grid) : this(name, dif, grid)
+        public GamePage(string name, string dif, string currentTime, Grid grid, int index) : this(name, dif, grid)
         {
             this.currentTime = currentTime;
+
+            if (index > 0)
+            {
+                var redLabel = (TagLabel)playGround.Children[index];
+                Highlightning(redLabel, false);
+            }
         }
 
         private void GamePage_Appearing(object sender, EventArgs e)
@@ -184,7 +190,6 @@ namespace Sudoku
                 saveGame = await DisplayAlert("Saving", "Save this game?", "Yes", "No");
             }
 
-            // TODO: Use this if-condition for a positive response to a request to save the game 
             if (saveGame)
             {
                 string dateTime = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
@@ -212,10 +217,7 @@ namespace Sudoku
             }
         }
 
-        private TapGestureRecognizer tapGesture = new TapGestureRecognizer
-        {
-            NumberOfTapsRequired = 1,
-        };
+        private TapGestureRecognizer tapGesture = new TapGestureRecognizer();
 
         //Bind tapGestureRecognaiser whith all labels in playground Grid 
         private void LabelTapOption()

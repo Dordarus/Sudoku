@@ -3,6 +3,7 @@ using Xamarin.Forms;
 using static Sudoku.TrueRandom;
 using static System.Math;
 using Sudoku.CustomProperties;
+using System.Collections.Generic;
 
 namespace Sudoku
 {
@@ -10,7 +11,7 @@ namespace Sudoku
     {
         public static int[,] BaseBigMatrix()
         {
-            const int n = 3;      
+            const int n = 3;
             var grid = new int[n * n, n * n];
 
             for (var i = 0; i < grid.GetLength(0); i++)
@@ -42,7 +43,7 @@ namespace Sudoku
         {
             var k = 0;
 
-            while (k < GetRandomNumber(5, 11))
+            while (k < GetRandomNumber(10, 16))
             {
                 var n = Convert.ToInt32(Sqrt(a.GetLength(1)));
 
@@ -103,80 +104,96 @@ namespace Sudoku
         }
 
         public static int[,] Swaping(int[,] trans)
-        {       
+        {
             SwapRows(trans);
             return SwapColumns(trans);
         }
 
-        public static Grid Filler(int[,] a)
+        public static Grid Filler(List<MyLabel> labelList)
         {
-            var controlGrid = new Grid { ColumnSpacing = 2, RowSpacing = 2 };
+            var playGround = new Grid { ColumnSpacing = 2, RowSpacing = 2 };
 
-            
-
-            var number = "";
-            var tag = "";
-            for (int i = 0; i < 9; i++)
-            {               
-                for (int j = 0; j < 9; j++)
+            var j = 0;
+            var i = 0;
+            var count = 0;
+            foreach (MyLabel label in labelList)
+            {
+                count = playGround.Children.Count;
+                //Part that fill grid with digits
+                if (j < 9)
                 {
-                    if (a[i, j] == 0)
+                    playGround.Children.Add(new TagLabel
                     {
-                        number = "";
-                        tag = "play";
+                        Text = label.Text,
+                        Tag = label.Tag
+                    }, j++, i);
+                }
+                else
+                {
+                    i++;
+                    j = 0;
+
+                    playGround.Children.Add(new TagLabel
+                    {
+                        Text = label.Text,
+                        Tag = label.Tag
+                    }, j++, i);
+                }
+
+                //Part that assigns colors to cells
+                if (i >= 3 && i <= 5)
+                {
+                    if (j >= 4 && j <= 6)
+                    {
+                        playGround.Children[count].BackgroundColor = Color.White;
                     }
                     else
                     {
-                        number = $"{a[i, j]}";
-                        tag = "base";
+                        playGround.Children[count].BackgroundColor = Color.LightGray;
                     }
-
-                    if (i >= 3 && i <= 5)
+                }
+                else
+                {
+                    if (j <= 3 || j >= 7)
                     {
-
-                        if (j >= 3 && j <= 5)
-                        {
-                            controlGrid.Children.Add(new TagLabel
-                            {
-                                Text = number,
-                                Tag = tag,
-                                BackgroundColor = Color.White
-                            }, j, i);
-                        }
-                        else
-                        {
-                            controlGrid.Children.Add(new TagLabel
-                            {
-                                Text = number,
-                                Tag = tag,
-                                BackgroundColor = Color.LightGray
-                            }, j, i);
-                        }
+                        playGround.Children[count].BackgroundColor = Color.White;
                     }
                     else
                     {
-                        if (j <= 2 || j >= 6)
-                        {
-                            controlGrid.Children.Add(new TagLabel
-                            {
-                                Text = number,
-                                Tag = tag,
-                                BackgroundColor = Color.White
-                            }, j, i);
-                        }
-                        else
-                        {
-                            controlGrid.Children.Add(new TagLabel
-                            {
-                                Text = number,
-                                Tag = tag,
-                                BackgroundColor = Color.LightGray
-                            }, j, i);
-                        }
+                        playGround.Children[count].BackgroundColor = Color.LightGray;
                     }
                 }
             }
-            return controlGrid;
+            return playGround;
+        }
+
+        public static List<MyLabel> ToLabelList(int[,] numbers)
+        {
+            var number = "";
+            var tag = "";
+
+            List<MyLabel> labelList = new List<MyLabel>();
+
+            foreach (int digit in numbers)
+            {
+                if (digit == 0)
+                {
+                    number = "";
+                    tag = "play";
+                }
+                else
+                {
+                    number = digit.ToString();
+                    tag = "base";
+                }
+
+                labelList.Add(new MyLabel
+                {
+                    Text = number,
+                    Tag = tag
+                });
+            }
+            return labelList;
         }
 
         public static Grid StartGame(string level)
@@ -186,16 +203,20 @@ namespace Sudoku
             var swaped = Swaping(trans);
 
             Grid playGround = null;
+            List<MyLabel> list = null;
             switch (level)
             {
                 case "Easy":
-                    playGround = Filler(Eraser(swaped, 4));
+                    list = ToLabelList(Eraser(swaped, 4));
+                    playGround = Filler(list);
                     break;
                 case "Medium":
-                    playGround = Filler(Eraser(swaped, 6));
+                    list = ToLabelList(Eraser(swaped, 6));
+                    playGround = Filler(list);
                     break;
                 case "Hard":
-                    playGround = Filler(Eraser(swaped, 8));
+                    list = ToLabelList(Eraser(swaped, 8));
+                    playGround = Filler(list);
                     break;
             }
             return playGround;

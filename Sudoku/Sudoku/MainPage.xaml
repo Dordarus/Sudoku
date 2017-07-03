@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Sudoku"
              x:Class="Sudoku.MainPage"
-             Title="Choose your game"
+             Title="Sudoku"
              Padding="5">
     <ContentPage.Resources>
         <ResourceDictionary>

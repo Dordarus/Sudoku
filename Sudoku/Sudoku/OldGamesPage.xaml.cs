@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-using static Sudoku.GameSaver;
+using static Sudoku.GameLoader;
 
 namespace Sudoku
 {
@@ -54,7 +54,7 @@ namespace Sudoku
             var dif = splited[1];
 
             var playground = await LoadGame(fileName);
-            await Navigation.PushAsync(new GamePage(name, dif, gameDuration, playground));
+            await Navigation.PushAsync(new GamePage(name, dif, gameDuration, playground, IndexOfRedLabel));
         }
 
         async Task UpdateFileList()
