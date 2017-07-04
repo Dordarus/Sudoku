@@ -65,10 +65,10 @@ namespace Sudoku
             foreach (var fileName in files)
             {
                 var splited = fileName.Substring(0, fileName.Length - 4).Split('|');
-                //if (splited.Length<2)
-                //{
-                //    continue;
-                //}
+                if (splited.Length < 2)
+                {
+                    continue;
+                }
                 games.Add(new Game { Time = splited[0], Title = splited[1], GameDuration = $"Game duration {splited[2]}", FullName = fileName });
             }
             Games = games;

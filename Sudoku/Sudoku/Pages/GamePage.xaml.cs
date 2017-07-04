@@ -225,7 +225,6 @@ namespace Sudoku
             foreach (TagLabel label in (frame.Content as Grid).Children)
             {
                 label.FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label));
-                label.FontAttributes = FontAttributes.Bold;
                 label.HorizontalTextAlignment = TextAlignment.Center;
                 label.VerticalTextAlignment = TextAlignment.Center;
                 label.TextColor = Color.Black;

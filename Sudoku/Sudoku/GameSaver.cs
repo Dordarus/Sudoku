@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 using Sudoku.CustomProperties;
 
@@ -19,10 +20,11 @@ namespace Sudoku
         {
             foreach (TagLabel label in grid.Children)
             {
-                ml.Add(new MyLabel { Text = label.Text, Tag = label.Tag});
-                colors.Add(label.BackgroundColor);
+                var attributeName = Enum.GetName(typeof(FontAttributes), label.FontAttributes);
+                ml.Add(new MyLabel { Text = label.Text, Tag = label.Tag, FontAttribute = attributeName});
+                colors.Add(label.BackgroundColor);              
             }
-            
+       
             list.Labels = ml;
             list.Colors = colors;
 

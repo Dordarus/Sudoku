@@ -40,7 +40,7 @@
     </Compile>
     <Compile Include="CustomProperties\TagLabel.cs" />
     <Compile Include="GameLoader.cs" />
-    <Compile Include="GamePage.xaml.cs">
+    <Compile Include="Pages\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameSaver.cs" />
@@ -48,26 +48,26 @@
     <Compile Include="Generator\TrueRandom.cs" />
     <Compile Include="IFileWorker.cs" />
     <Compile Include="ListClass.cs" />
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyColor.cs" />
     <Compile Include="MyLabel.cs" />
-    <Compile Include="NewGamePage.xaml.cs">
+    <Compile Include="Pages\NewGamePage.xaml.cs">
       <DependentUpon>NewGamePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OldGamesPage.xaml.cs">
+    <Compile Include="Pages\OldGamesPage.xaml.cs">
       <DependentUpon>OldGamesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Correct\SmallSquare.cs" />
     <Compile Include="Correct\Сorrectness.cs" />
-    <Compile Include="WinnerPage.xaml.cs">
+    <Compile Include="Pages\WinnerPage.xaml.cs">
       <DependentUpon>WinnerPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainPage.xaml">
+    <EmbeddedResource Include="Pages\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -94,25 +94,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NewGamePage.xaml">
+    <EmbeddedResource Include="Pages\NewGamePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GamePage.xaml">
+    <EmbeddedResource Include="Pages\GamePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="OldGamesPage.xaml">
+    <EmbeddedResource Include="Pages\OldGamesPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WinnerPage.xaml">
+    <EmbeddedResource Include="Pages\WinnerPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

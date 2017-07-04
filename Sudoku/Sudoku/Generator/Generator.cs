@@ -125,7 +125,8 @@ namespace Sudoku
                     playGround.Children.Add(new TagLabel
                     {
                         Text = label.Text,
-                        Tag = label.Tag
+                        Tag = label.Tag,
+                        FontAttributes = (FontAttributes)Enum.Parse(typeof(FontAttributes), label.FontAttribute)
                     }, j++, i);
                 }
                 else
@@ -136,7 +137,8 @@ namespace Sudoku
                     playGround.Children.Add(new TagLabel
                     {
                         Text = label.Text,
-                        Tag = label.Tag
+                        Tag = label.Tag,
+                        FontAttributes = (FontAttributes)Enum.Parse(typeof(FontAttributes), label.FontAttribute)
                     }, j++, i);
                 }
 
@@ -190,7 +192,8 @@ namespace Sudoku
                 labelList.Add(new MyLabel
                 {
                     Text = number,
-                    Tag = tag
+                    Tag = tag,
+                    FontAttribute = "Bold"
                 });
             }
             return labelList;
