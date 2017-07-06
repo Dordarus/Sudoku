@@ -9,7 +9,7 @@ using static Sudoku.GameLoader;
 
 namespace Sudoku
 {
-    public class Game
+    public class GameInfo
     {
         public string Title { get; set; }
         public string Time { get; set; }
@@ -20,7 +20,8 @@ namespace Sudoku
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class OldGamesPage : ContentPage
     {
-        public List<Game> Games { get; set; }
+        public List<GameInfo> Games { get; set; }
+
 
         public OldGamesPage()
         {
@@ -36,7 +37,7 @@ namespace Sudoku
         async void Delete(object sender, EventArgs args)
         {
             var bindableObject = (BindableObject)sender;
-            var context = ((Game)bindableObject.BindingContext);
+            var context = ((GameInfo)bindableObject.BindingContext);
             var name = context.FullName;
 
             await DependencyService.Get<IFileWorker>().DeleteAsync(name);
@@ -45,31 +46,32 @@ namespace Sudoku
 
         public async void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var game = (Game)e.Item;
+            var game = (GameInfo)e.Item;
             var fileName = game.FullName;           
             var gameDuration = game.GameDuration.Substring(14);
 
-            var splited = game.Title.Split();
-            var name = splited[0];
-            var dif = splited[1];
+            var splitted = game.Title.Split();
+            var name = splitted[0];
+            var dif = splitted[1];
+            var savingDate = game.Time;
 
             var playground = await LoadGame(fileName);
-            await Navigation.PushAsync(new GamePage(name, dif, gameDuration, playground, IndexOfRedLabel));
+            await Navigation.PushAsync(new GamePage(name, dif, gameDuration, playground, IndexOfRedLabel, savingDate));
         }
 
         async Task UpdateFileList()
         {
             var files = await DependencyService.Get<IFileWorker>().GetFilesAsync();
-            List<Game> games = new List<Game>();
+            List<GameInfo> games = new List<GameInfo>();
 
             foreach (var fileName in files)
             {
-                var splited = fileName.Substring(0, fileName.Length - 4).Split('|');
-                if (splited.Length < 2)
+                var splitted = fileName.Substring(0, fileName.Length - 4).Split('|');
+                if (splitted.Length < 2)
                 {
                     continue;
                 }
-                games.Add(new Game { Time = splited[0], Title = splited[1], GameDuration = $"Game duration {splited[2]}", FullName = fileName });
+                games.Add(new GameInfo { Time = splitted[0], Title = splitted[1], GameDuration = $"Game duration {splitted[2]}", FullName = fileName });
             }
             Games = games;
             BindingContext = this;

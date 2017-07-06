@@ -16,6 +16,8 @@ namespace Sudoku
     {
         private string name;
         private string dif;
+        private string startTime = "";
+        private string savingDate = "";
         private string currentTime = "00:00";
 
         Grid playGround;
@@ -26,8 +28,6 @@ namespace Sudoku
 
             this.name = name;
             this.dif = dif;
-
-            DisplayTime();
 
             if (grid == null)
                 playGround = StartGame(dif);
@@ -42,9 +42,12 @@ namespace Sudoku
             Appearing += GamePage_Appearing;
         }
 
-        public GamePage(string name, string dif, string currentTime, Grid grid, int index) : this(name, dif, grid)
+        public GamePage(string name, string dif, string duration, Grid grid, int index, string savingDate) 
+            : this(name, dif, grid)
         {
-            this.currentTime = currentTime;
+            currentTime = duration;
+            startTime = duration;
+            this.savingDate = savingDate;
 
             if (index > 0)
             {
@@ -75,6 +78,8 @@ namespace Sudoku
                 }
                 counter = 0;
             }
+
+            DisplayTime();
         }
 
         private void TapGesture_Label(object sender, EventArgs e)
@@ -189,12 +194,17 @@ namespace Sudoku
             {
                 saveGame = await DisplayAlert("Saving", "Save this game?", "Yes", "No");
             }
-
+            var startInfo = "";
             if (saveGame)
             {
-                string dateTime = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
-                string info = $"{dateTime}|{name} {dif}|{currentTime}";
-                SaveGame(playGround, info);
+                string dateTime = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+                string currentInfo = $"{dateTime}|{name} {dif}|{currentTime}";
+                if (savingDate != "")
+                {
+                    startInfo = $"{savingDate}|{name} {dif}|{startTime}";
+                }
+
+                SaveGame(playGround, currentInfo, startInfo);
             }
 
             if (leaveGame)
@@ -207,7 +217,7 @@ namespace Sudoku
         private bool alive = true;
         private async void DisplayTime()
         {
-            DateTime dt = DateTime.Parse(currentTime);
+            DateTime dt = DateTime.ParseExact(currentTime, "mm:ss", null);
             while (alive)
             {
                 dt = dt.AddSeconds(1);

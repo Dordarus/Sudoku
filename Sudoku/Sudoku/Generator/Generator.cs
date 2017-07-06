@@ -74,8 +74,8 @@ namespace Sudoku
         internal static int[,] SwapColumns(int[,] a)
         {
             var trans = Transposition(a);
-            SwapRows(trans);
-            return Transposition(trans);
+            var rows = SwapRows(trans);
+            return Transposition(rows);
         }
 
         public static int[,] Eraser(int[,] a, int k)
@@ -105,8 +105,8 @@ namespace Sudoku
 
         public static int[,] Swaping(int[,] trans)
         {
-            SwapRows(trans);
-            return SwapColumns(trans);
+            var rows = SwapRows(trans);
+            return SwapColumns(rows);
         }
 
         public static Grid Filler(List<MyLabel> labelList)
@@ -214,11 +214,11 @@ namespace Sudoku
                     playGround = Filler(list);
                     break;
                 case "Medium":
-                    list = ToLabelList(Eraser(swaped, 6));
+                    list = ToLabelList(Eraser(swaped, 5));
                     playGround = Filler(list);
                     break;
                 case "Hard":
-                    list = ToLabelList(Eraser(swaped, 8));
+                    list = ToLabelList(Eraser(swaped, 7));
                     playGround = Filler(list);
                     break;
             }

@@ -53,7 +53,7 @@ namespace Sudoku.Droid
             return Path.Combine(GetDocsPath(), filename);
         }
 
-        public string GetDocsPath()
+        string GetDocsPath()
         {
             return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
