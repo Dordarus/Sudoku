@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
+using static Sudoku.GameSaver;
 
 namespace Sudoku
 {
     public partial class App : Application
     {
+        GamePage currentGame;
+
         public App()
         {
             InitializeComponent();
@@ -16,21 +14,17 @@ namespace Sudoku
             MainPage = new NavigationPage(new MainPage());
         }
 
-        protected override void OnStart()
-        {
-            
-        }
-
-        //TODO: handle this event if player 
         protected override void OnSleep()
         {
-            // Handle when your app sleeps
+            currentGame = CurrentGame.CurrentGamePage;
+            currentGame.alive = false;
+            SaveGame(currentGame.playGround,currentGame.currentInfo, currentGame.startInfo);
+            currentGame.startInfo = currentGame.currentInfo;
         }
 
-        //TODO: and this
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            currentGame.alive = true;
         }
     }
 }

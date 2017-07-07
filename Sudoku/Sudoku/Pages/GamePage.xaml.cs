@@ -14,13 +14,13 @@ namespace Sudoku
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GamePage : ContentPage
     {
-        private string name;
-        private string dif;
-        private string startTime = "";
-        private string savingDate = "";
-        private string currentTime = "00:00";
+        public string name;
+        public string dif;
+        public string startTime = "";
+        public string savingDate = "";
+        public string currentTime = "00:00";
+        public Grid playGround;
 
-        Grid playGround;
         public GamePage(string name, string dif, Grid grid = null)
         {
             InitializeComponent();
@@ -40,6 +40,8 @@ namespace Sudoku
             Numbers();
 
             Appearing += GamePage_Appearing;
+
+            CurrentGame.CurrentGamePage = this;
         }
 
         public GamePage(string name, string dif, string duration, Grid grid, int index, string savingDate) 
@@ -53,7 +55,7 @@ namespace Sudoku
             {
                 var redLabel = (TagLabel)playGround.Children[index];
                 Highlightning(redLabel, false);
-            }
+            }          
         }
 
         private void GamePage_Appearing(object sender, EventArgs e)
@@ -78,8 +80,14 @@ namespace Sudoku
                 }
                 counter = 0;
             }
-
             DisplayTime();
+
+            string dateTime = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+            currentInfo = $"{dateTime}|{name} {dif}|{currentTime}";
+
+            if (savingDate != "")
+                startInfo = $"{savingDate}|{name} {dif}|{startTime}";
+
         }
 
         private void TapGesture_Label(object sender, EventArgs e)
@@ -91,8 +99,9 @@ namespace Sudoku
             Highlightning((TagLabel)sender, isCorrectNUmber);
         }
 
-        //Method work with data with send TapGesture_Label event, when 1 of 81 cells was tapped, changing the color of the tapped cell and all labels with same numbers to LightBlue, 
-        //remembered last tapped cell and all labels with same numbers and change their color on base color, when tapped another one
+        /*Method work with data with send TapGesture_Label event, when 1 of 81 cells was tapped, changing the color of the tapped cell and 
+        all labels with same numbers to LightBlue, remembered last tapped cell and all labels with same numbers and change their color on
+        base color, when tapped another one*/
         private int lastIndex = -1;
         private Color lastColor;
         private Dictionary<int, Color> lastCells = new Dictionary<int, Color>();
@@ -184,37 +193,30 @@ namespace Sudoku
             return _canClose;
         }
 
+
+        public string currentInfo;
+        public string startInfo; 
         //Display alert which protect user from accidental press of a button
-        private async void ShowExitDialog()
+        public async void ShowExitDialog()
         {
             bool saveGame = false;
 
             var leaveGame = await DisplayAlert("Leave current game!", "Are you sure?", "Yes", "No");
+
             if (leaveGame)
-            {
                 saveGame = await DisplayAlert("Saving", "Save this game?", "Yes", "No");
-            }
-            var startInfo = "";
+
             if (saveGame)
             {
-                string dateTime = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
-                string currentInfo = $"{dateTime}|{name} {dif}|{currentTime}";
-                if (savingDate != "")
-                {
-                    startInfo = $"{savingDate}|{name} {dif}|{startTime}";
-                }
-
-                SaveGame(playGround, currentInfo, startInfo);
+               SaveGame(playGround, currentInfo, startInfo);
             }
 
             if (leaveGame)
-            {
                 await Navigation.PopToRootAsync();
-            }
         }
 
         //Display name of player, difficult, time which passed from start of game in title
-        private bool alive = true;
+        public bool alive = true;
         private async void DisplayTime()
         {
             DateTime dt = DateTime.ParseExact(currentTime, "mm:ss", null);
