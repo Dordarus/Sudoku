@@ -40,11 +40,12 @@
     </Compile>
     <Compile Include="CurrentGame.cs" />
     <Compile Include="CustomProperties\TagLabel.cs" />
-    <Compile Include="GameLoader.cs" />
+    <Compile Include="WinnerList.cs" />
+    <Compile Include="Serealization\Loader.cs" />
     <Compile Include="Pages\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameSaver.cs" />
+    <Compile Include="Serealization\Saver.cs" />
     <Compile Include="Generator\Generator.cs" />
     <Compile Include="Generator\TrueRandom.cs" />
     <Compile Include="IFileWorker.cs" />

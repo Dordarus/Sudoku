@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Sudoku.CustomProperties;
 
 using Newtonsoft.Json;
 
 using Xamarin.Forms;
-using System.Threading.Tasks;
+
 
 namespace Sudoku
 {
-    static class GameSaver
+    static class Saver
     {
         static ListClass list = new ListClass();
 
@@ -29,7 +30,7 @@ namespace Sudoku
             list.Labels = ml;
             list.Colors = colors;
 
-            var serialized = await Serialize();
+            var serialized = await Serialize(list);
 
             if (startInfo != "")
             {
@@ -39,10 +40,17 @@ namespace Sudoku
             else
                 await DependencyService.Get<IFileWorker>().SaveTextAsync($"{currentInfo}.dat", serialized);
         }
-        
-        private static Task<string> Serialize()
+
+        public static async void SaveWinner(WinnerList winners)
         {
-            return Task.Run(() => JsonConvert.SerializeObject(list));
+            var serialized = await Serialize(winners);
+
+            await DependencyService.Get<IFileWorker>().SaveTextAsync("Leaderboard.dat", serialized);
+        }
+      
+        private static Task<string> Serialize(object toSerialize)
+        {
+            return Task.Run(() => JsonConvert.SerializeObject(toSerialize));
         }        
     }
 }

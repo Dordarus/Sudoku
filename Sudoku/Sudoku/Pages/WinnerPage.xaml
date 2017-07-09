@@ -1,10 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Sudoku.WinnerPage">
+             x:Class="Sudoku.WinnerPage"
+             Title="Leaderboard">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin Forms!" />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                <Label Text="Name" FontAttributes="Bold" FontSize="18" HorizontalOptions="FillAndExpand"/>
+                <Label Text="Difficult" FontAttributes="Bold"  FontSize="18" HorizontalOptions="FillAndExpand"/>
+                <Label Text="Game Duration" FontAttributes="Bold"  FontSize="18" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <ScrollView VerticalOptions="FillAndExpand">
+                <StackLayout>
+                    <ListView x:Name="gamesList" HasUnevenRows="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.View>
+                                        <StackLayout>
+                                            <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+                                                <Label Text="{Binding Name}" FontSize="18" />
+                                                <Label Text="{Binding Difficult}" FontSize="18"/>
+                                                <Label Text="{Binding GameDuration}" FontSize="18"/>
+                                            </StackLayout>
+                                            <Label Text="{Binding DateOfGame}" HorizontalOptions="End"/>
+                                        </StackLayout>
+                                    </ViewCell.View>
+                                    <ViewCell.ContextActions>
+                                        <MenuItem Text="Delete" IsDestructive="True" Clicked="Delete" />
+                                    </ViewCell.ContextActions>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </ScrollView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

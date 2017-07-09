@@ -11,21 +11,21 @@ using Xamarin.Forms;
 
 namespace Sudoku
 {
-    static class GameLoader
+    static class Loader
     {
         public static int IndexOfRedLabel { get; set; }
        
         public static async Task<Grid> LoadGame(string fileName)
         {
             var fromFile = await DependencyService.Get<IFileWorker>().LoadTextAsync(fileName);
-            var listClass = await Deserialize(fromFile);
+            var listClass = await DeserializePlayGround(fromFile);
 
             IndexOfRedLabel = IndexRedLabel(listClass.Colors);
 
             return Filler(listClass.Labels);
         }
 
-        private static Task<ListClass> Deserialize(string serialized)
+        private static Task<ListClass> DeserializePlayGround(string serialized)
         {
             var jobject = JObject.Parse(serialized);
             var labeltList = jobject.SelectToken("Labels").Select(jt => jt.ToObject<MyLabel>()).ToList();
@@ -46,6 +46,24 @@ namespace Sudoku
 
             return Task.FromResult(listClass);
         }
+
+        public static async Task<List<WinnerInfo>> LoadLeaderboard()
+        {
+            var fromFile = await DependencyService.Get<IFileWorker>().LoadTextAsync("Leaderboard.dat");
+
+            var winnerList = await DeserializeLeaderboard(fromFile);
+
+            return winnerList.Winners;
+        }
+
+        private static Task<WinnerList> DeserializeLeaderboard(string serialized)
+        {
+            var jobject = JObject.Parse(serialized);
+            var winnersList = jobject.SelectToken("Winners").Select(jt => jt.ToObject<WinnerInfo>()).ToList();
+
+            return Task.FromResult(new WinnerList { Winners = winnersList });
+        }
+
 
         private static int IndexRedLabel(List<Color> colors)
         {

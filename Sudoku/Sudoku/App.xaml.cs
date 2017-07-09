@@ -1,5 +1,5 @@
 ﻿using Xamarin.Forms;
-using static Sudoku.GameSaver;
+using static Sudoku.Saver;
 
 namespace Sudoku
 {
@@ -12,6 +12,15 @@ namespace Sudoku
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());
+        }
+
+        protected override async void OnStart()
+        {
+            bool exist = await DependencyService.Get<IFileWorker>().ExistsAsync("Leaderboard.dat");
+            if(!exist)
+            {
+                await DependencyService.Get<IFileWorker>().SaveTextAsync("LeaderBoard.dat", "");
+            }          
         }
 
         protected override void OnSleep()

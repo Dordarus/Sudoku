@@ -4,7 +4,7 @@ using Sudoku.CustomProperties;
 using System.Threading.Tasks;
 using static Sudoku.Generator;
 using static Sudoku.Сorrectness;
-using static Sudoku.GameSaver;
+using static Sudoku.Saver;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -324,7 +324,7 @@ namespace Sudoku
                     //Show Winner modal page with scores : time of game duration, name and difficult 
                     if (hasEmptyCell == false && isCorrectNumber)
                     {
-                        Navigation.PushModalAsync(new WinnerPage(name, dif, currentTime));
+                        Navigation.PushAsync(new WinnerPage(name, dif, currentTime));
                     }
                 }
                 else
