@@ -19,5 +19,9 @@ namespace Sudoku
         {
             await Navigation.PushAsync(new OldGamesPage());
         }
+        private async void LeaderboardButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new WinnerPage());
+        }
     }
 }

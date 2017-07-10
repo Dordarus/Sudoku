@@ -51,9 +51,15 @@ namespace Sudoku
         {
             var fromFile = await DependencyService.Get<IFileWorker>().LoadTextAsync("Leaderboard.dat");
 
-            var winnerList = await DeserializeLeaderboard(fromFile);
-
-            return winnerList.Winners;
+            if (fromFile != "")
+            {
+                var winnerList = await DeserializeLeaderboard(fromFile);
+                return winnerList.Winners;
+            }
+            else
+            {
+                return new List<WinnerInfo>();
+            }
         }
 
         private static Task<WinnerList> DeserializeLeaderboard(string serialized)

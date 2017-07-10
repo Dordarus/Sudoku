@@ -272,87 +272,91 @@ namespace Sudoku
         Stack<string> numberLog = new Stack<string>();
         private void Button_Clicked(object sender, EventArgs e)
         {
-            var button = (Button)sender;
-            var parentGrid = (Grid)((button).Parent);
-            var label = (TagLabel)playGround.Children[lastIndex];
-            var hasEmptyCell = true;
-
-            if (label.Tag == "play")
+            if (lastIndex > 0)
             {
-                indexLog.Push(lastIndex);
-                numberLog.Push(label.Text);
+                var button = (Button)sender;
+                var parentGrid = (Grid)((button).Parent);
+                var label = (TagLabel)playGround.Children[lastIndex];
+                var hasEmptyCell = true;
 
-                if (parentGrid.Children.IndexOf(button) != parentGrid.Children.Count - 1)
+                if (label.Tag == "play")
                 {
-                    var count = 0;
-
-                    label.FontAttributes = FontAttributes.None;
-                    label.Text = button.Text;
-
                     indexLog.Push(lastIndex);
                     numberLog.Push(label.Text);
 
-                    buttonStackLayout.Children[0].IsEnabled = true;
-
-                    var isCorrectNumber = IsCorrectNumber(lastIndex, label.Text, playGround);
-
-                    //Cheking text of all labels, if there are no emty cells and last number is correct number - you are winner
-                    foreach (TagLabel tagLabel in playGround.Children)
+                    if (parentGrid.Children.IndexOf(button) != parentGrid.Children.Count - 1)
                     {
-                        if (tagLabel.Text == "")
-                        {
-                            hasEmptyCell = true;
-                            break;
-                        }
-                        else
-                        {
-                            hasEmptyCell = false;
-                            continue;
-                        }
-                    }
+                        var count = 0;
 
-                    foreach (TagLabel tagLabel in playGround.Children)
-                    {
-                        if (tagLabel.Text == button.Text)
-                        {
-                            if (++count == 9)
-                            {
-                                button.IsEnabled = false;
-                            }
-                        }
-                    }
-                    //Show Winner modal page with scores : time of game duration, name and difficult 
-                    if (hasEmptyCell == false && isCorrectNumber)
-                    {
-                        Navigation.PushAsync(new WinnerPage(name, dif, currentTime));
-                    }
-                }
-                else
-                {
-                    label.Text = "";
-                    TapGesture_Label(label, new EventArgs());
+                        label.FontAttributes = FontAttributes.None;
+                        label.Text = button.Text;
 
-                    indexLog.Push(lastIndex);
-                    numberLog.Push(label.Text);
-                }
+                        indexLog.Push(lastIndex);
+                        numberLog.Push(label.Text);
 
-                var counter = 0;
+                        buttonStackLayout.Children[0].IsEnabled = true;
 
-                foreach (Button b in parentGrid.Children)
-                {
-                    if (b.IsEnabled == false)
-                    {
+                        var isCorrectNumber = IsCorrectNumber(lastIndex, label.Text, playGround);
+
+                        //Cheking text of all labels, if there are no emty cells and last number is correct number - you are winner
                         foreach (TagLabel tagLabel in playGround.Children)
                         {
-                            if (tagLabel.Text == b.Text)
+                            if (tagLabel.Text == "")
                             {
-                                ++counter;
+                                hasEmptyCell = true;
+                                break;
+                            }
+                            else
+                            {
+                                hasEmptyCell = false;
+                                continue;
                             }
                         }
 
-                        if (counter < 9)
+                        foreach (TagLabel tagLabel in playGround.Children)
                         {
-                            b.IsEnabled = true;
+                            if (tagLabel.Text == button.Text)
+                            {
+                                if (++count == 9)
+                                {
+                                    button.IsEnabled = false;
+                                }
+                            }
+                        }
+                        //Show Winner modal page with scores : time of game duration, name and difficult 
+                        if (hasEmptyCell == false && isCorrectNumber)
+                        {
+                            alive = false;
+                            Navigation.PushAsync(new WinnerPage(name, dif, currentTime));
+                        }
+                    }
+                    else
+                    {
+                        label.Text = "";
+                        TapGesture_Label(label, new EventArgs());
+
+                        indexLog.Push(lastIndex);
+                        numberLog.Push(label.Text);
+                    }
+
+                    var counter = 0;
+
+                    foreach (Button b in parentGrid.Children)
+                    {
+                        if (b.IsEnabled == false)
+                        {
+                            foreach (TagLabel tagLabel in playGround.Children)
+                            {
+                                if (tagLabel.Text == b.Text)
+                                {
+                                    ++counter;
+                                }
+                            }
+
+                            if (counter < 9)
+                            {
+                                b.IsEnabled = true;
+                            }
                         }
                     }
                 }

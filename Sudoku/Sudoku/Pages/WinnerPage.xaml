@@ -5,24 +5,34 @@
              Title="Leaderboard">
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
-                <Label Text="Name" FontAttributes="Bold" FontSize="18" HorizontalOptions="FillAndExpand"/>
-                <Label Text="Difficult" FontAttributes="Bold"  FontSize="18" HorizontalOptions="FillAndExpand"/>
-                <Label Text="Game Duration" FontAttributes="Bold"  FontSize="18" HorizontalOptions="FillAndExpand"/>
-            </StackLayout>
+            <Grid BackgroundColor="#f2f2f2" Padding="0,5,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Name" FontAttributes="Bold" FontSize="18"  TextColor="Black" Grid.Column="0" HorizontalOptions="Center"/>
+                <Label Text="Difficult" FontAttributes="Bold"  FontSize="18"  TextColor="Black" Grid.Column="1" HorizontalOptions="Center"/>
+                <Label Text="Duration" FontAttributes="Bold"  FontSize="18" TextColor="Black" Grid.Column="2" HorizontalOptions="Center"/>
+            </Grid>
             <ScrollView VerticalOptions="FillAndExpand">
                 <StackLayout>
-                    <ListView x:Name="gamesList" HasUnevenRows="True">
+                    <ListView x:Name="gamesList" HasUnevenRows="True" Margin="5,0,5,0">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
                                     <ViewCell.View>
                                         <StackLayout>
-                                            <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
-                                                <Label Text="{Binding Name}" FontSize="18" />
-                                                <Label Text="{Binding Difficult}" FontSize="18"/>
-                                                <Label Text="{Binding GameDuration}" FontSize="18"/>
-                                            </StackLayout>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Text="{Binding Name}" Grid.Column="0" TextColor="Black" FontSize="18" HorizontalOptions="Center"/>
+                                                <Label Text="{Binding Difficult}" Grid.Column="1" TextColor="Black" FontSize="18" HorizontalOptions="Center"/>
+                                                <Label Text="{Binding GameDuration}" Grid.Column="2" TextColor="Black" FontSize="18" HorizontalOptions="Center"/>
+                                            </Grid>
                                             <Label Text="{Binding DateOfGame}" HorizontalOptions="End"/>
                                         </StackLayout>
                                     </ViewCell.View>

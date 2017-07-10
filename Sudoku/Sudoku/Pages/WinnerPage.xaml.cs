@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using static Sudoku.Saver;
@@ -26,47 +25,57 @@ namespace Sudoku
 
         public List<WinnerInfo> Winners { get; set; }
 
-        public WinnerPage(string name, string dif, string gameDuration)
+        public WinnerPage(string name, string dif, string gameDuration) : this()
         {
-            Winners = new List<WinnerInfo>();
-            InitializeComponent();
+            NavigationPage.SetHasBackButton(this, false);
 
             winner.Name = name;
             winner.Difficult = dif;
             winner.GameDuration = gameDuration;
             winner.DateOfGame = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
+
+            Winners.Add(winner);
+
+            SaveChanges();
         }
 
-        private bool _canClose = true;
+        void SaveChanges()
+        {
+            list.Winners = Winners;
+            SaveWinner(list);
+        }
+
+        public WinnerPage()
+        {
+            InitializeComponent();
+            Winners = new List<WinnerInfo>();
+            LoadList();
+        }
+
+        bool _canClose = true;
         protected override bool OnBackButtonPressed()
         {
             if (_canClose)
             {
-                ShowExitDialog();
+                ToRoot();
             }
             return _canClose;
         }
-
-
-        public async void ShowExitDialog()
+        
+        async void ToRoot()
         {
-            var leaveGame = await DisplayAlert("Back to Main Menu!", "Are you sure?", "Yes", "No");     
-
-            if (leaveGame)
-                await Navigation.PopToRootAsync();
+            await Navigation.PopToRootAsync();
         }
 
-        private async Task LoadList()
+        async void LoadList()
         {
-            var winnersList = await LoadLeaderboard();
-            Winners = winnersList;
+            Winners = await LoadLeaderboard();
         }
 
         void UpdateWinnersList()
         {
             BindingContext = this;
             gamesList.ItemsSource = Winners;
-
             gamesList.SelectedItem = null;
         }
 
@@ -75,22 +84,18 @@ namespace Sudoku
             var bindableObject = (BindableObject)sender;
             var context = ((WinnerInfo)bindableObject.BindingContext);
 
-            Winners.Remove(context);
+            List<WinnerInfo> clone = new List<WinnerInfo>(Winners);
+            clone.Remove(context);
+            Winners = clone;
+
+            SaveChanges();
 
             UpdateWinnersList();
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            await LoadList();
-
-            Winners.Add(winner);
-
-            list.Winners = Winners;
-            SaveWinner(list);
-
             UpdateWinnersList();
         }
     }

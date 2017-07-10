@@ -18,6 +18,7 @@
         <StackLayout>
             <Button Text="Start New Game" Style="{StaticResource buttonStyle}" Clicked="StartButton_Clicked"/>
             <Button Text="Continue Old Game" Style="{StaticResource buttonStyle}" Clicked="ContinueButton_Clicked"/>
+            <Button Text="Show Leaderboard" Style="{StaticResource buttonStyle}" Clicked="LeaderboardButton_Clicked"/>
         </StackLayout>
     </Frame>
 </ContentPage>
